@@ -1,7 +1,6 @@
 [BITS 32]
 
 global _start
-global problem
 
 extern kernel_main
 
@@ -24,8 +23,4 @@ _start:
     call kernel_main
     jmp $
 
-
-problem:
-    int 0
-    
 times 512-($-$$) db 0

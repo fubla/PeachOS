@@ -67,13 +67,10 @@ void print(const char* str)
     }
 }
 
-extern void problem();
-
 void kernel_main()
 {
     terminal_initialize();
     print("Hello world!\ntest");
     // initialize IDT
     idt_init();
-    problem();
 }
