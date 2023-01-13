@@ -74,4 +74,5 @@ void kernel_main()
     print("Hello world!\ntest");
     // initialize IDT
     idt_init();
+    
 }
