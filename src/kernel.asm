@@ -31,9 +31,6 @@ _start:
     mov al, 00000001b   ; Put PIC into x86 mode
     out 0x21, al
     ; End remap of master PIC
-
-    ; Enable interrupts
-    sti
     
     call kernel_main
     jmp $
