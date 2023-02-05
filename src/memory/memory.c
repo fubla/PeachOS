@@ -9,3 +9,18 @@ void* memset(void* ptr, int c, size_t size)
     }
     return ptr;
 }
+
+int memcmp(const void* ptr1, const void* ptr2, size_t num)
+{
+    char* c1 = ptr1;
+    char* c2 = ptr2;
+    while (num-- > 0)
+    {
+        if (*c1++ != *c2++)
+        {
+            return c1[-1] < c2[-1] ? -1 : 1;
+        }
+    }
+
+    return 0;
+}
