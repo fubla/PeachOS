@@ -4,6 +4,6 @@
 #include <stddef.h>
 
 void* memset(void* ptr, int c, size_t size);
-int memcmp(const void* ptr1, const void* ptr2, size_t num);
+int memcmp(void* ptr1, void* ptr2, size_t num);
 
 #endif
