@@ -1,2 +1,2 @@
 # Course project for Udemy's Kernel development course
-Implementation of the example OS called PeachOS by the course instructor Daniel McCarthy
+My implementation of the hobby operating system PeachOS as described by the course instructor Daniel McCarthy.
