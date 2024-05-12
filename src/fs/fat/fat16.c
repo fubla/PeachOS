@@ -136,21 +136,43 @@ struct filesystem* fat16_init()
     return &fat16_fs;
 }
 
-static void fat_16_init_privat(struct disk* disk, struct fat_private* fat_private)
+static void fat_16_init_privat(struct disk* disk, struct fat_private* private)
 {
-    memset(private, 0, sizeof(struct fat_private));
+    memset(private, 0, sizeof(struct private));
     private->cluster_read_stream = diskstreamer_new(disk->id);
+    private->fat_read_stream = diskstreamer_new(disk->id);
+    private->directory_stream = diskstreamer_new(disk->id);
 }
 
 int fat16_resolve(struct disk* disk)
 {
-    int res = 0;
+    int res = PEACHOS_ALL_OK;
     struct fat_private* fat_private = kzalloc(sizeof(struct fat_private));
     fat_16_init_private(disk, fat_private);
+
+    struct disk_stream* stream = diskstreamer_new(disk->id);
+    if(!stream)
+    {
+        res = -ENOMEM;
+        goto out;   
+    }
+
+    if (diskstreamer_read(stream, &fat_private->header, sizeof(fat_private->header)) != PEACHOS_ALL_OK)
+    {
+        res = -EIO;
+        goto out;
+    }
+
+    if (fat_private->header.shared.extended_header.signature != PEACHOS_FAT16_SIGNATURE)
+    {
+        res = -EFSNOTUS;
+        goto out;
+    }
+out:
     return res;
 }
 
 void* fat16_open(struct disk *disk, struct path_part *path, FILE_MODE mode)
 {
-    return 0;
+    return NULL;
 }
