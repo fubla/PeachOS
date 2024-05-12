@@ -24,6 +24,19 @@ size_t strnlen(const char* str, int max)
     return i;
 }
 
+char* strcpy(char* dest, const char* src)
+{
+    char* res = dest;
+    while(*src != 0)
+    {
+        *(dest++) = *(src++);
+    }
+
+    *dest = 0x00;
+    
+    return res;
+}
+
 bool isdigit(char c)
 {
     return c >= '0' && c <= '9';
