@@ -7,5 +7,6 @@
 #define ENOMEM 3
 #define EBADPATH 4
 #define EFSNOTUS 5  // Disk filesystem not us
+#define ERDONLY 6
 
 #endif

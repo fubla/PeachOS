@@ -24,3 +24,14 @@ int memcmp(void* ptr1, void* ptr2, size_t num)
 
     return 0;
 }
+
+void* memcpy(void* dest, void* src, int len)
+{
+    char* d = dest;
+    char* s = src;
+    while(len--)
+    {
+        *d++ = *s++;
+    }
+    return dest;
+}

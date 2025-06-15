@@ -15,4 +15,6 @@
 #define PEACHOS_MAX_FILE_DESCRIPTORS 512
 
 #define PEACHOS_SECTOR_SIZE         512
+
+#define PEACHOS_MAX_PATH 108
 #endif
