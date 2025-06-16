@@ -8,5 +8,6 @@
 #define EBADPATH 4
 #define EFSNOTUS 5  // Disk filesystem not us
 #define ERDONLY 6
+#define EUNIMP 7
 
 #endif
