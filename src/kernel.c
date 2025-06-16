@@ -68,11 +68,21 @@ void print(const char* str)
 
 static struct paging_4gb_chunk* kernel_chunk = 0;
 
+void panic(const char* msg)
+{
+    print("\nThe system has encountered an unrecoverable error and has halted:\n");
+    print(msg);
+    while(1)
+    {
+        disable_interrupts();
+        HALT;
+    }
+}
+
 void kernel_main()
 {
     terminal_initialize();
     print("Hello world!\ntest");
-    
     // Initialize the heap
     kheap_init();
 
@@ -97,11 +107,15 @@ void kernel_main()
     // Enable system interrupts
     enable_interrupts();
     
+    panic("Test");
     int fd = fopen("0:/hello.txt", "r");
     if(fd)
     {
+        print("opened\n");
         struct file_stat s;
         fstat(fd, &s);
+        fclose(fd);
+        print("closed file\n");
     }
     while(1) {}
 }
