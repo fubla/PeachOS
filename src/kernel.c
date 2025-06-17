@@ -5,14 +5,16 @@
 #include "io/io.h"
 #include "memory/heap/kheap.h"
 #include "memory/paging/paging.h"
+#include "memory/memory.h"
 #include "string/string.h"
 #include "disk/disk.h"
 #include "disk/streamer.h"
 #include "fs/file.h"
 #include "fs/pparser.h"
+#include "gdt/gdt.h"
+#include "config.h"
 
-
-uint16_t* video_mem = 0;
+uint16_t *video_mem = 0;
 uint16_t terminal_col = 0;
 uint16_t terminal_row = 0;
 
@@ -28,7 +30,7 @@ void terminal_putchar(int x, int y, char c, char colour)
 
 void terminal_writechar(char c, char colour)
 {
-    if(c == '\n')
+    if (c == '\n')
     {
         terminal_col = 0;
         terminal_row++;
@@ -45,7 +47,7 @@ void terminal_writechar(char c, char colour)
 
 void terminal_initialize()
 {
-    video_mem = (uint16_t*)(0xB8000);
+    video_mem = (uint16_t *)(0xB8000);
     terminal_col = 0;
     terminal_row = 0;
     for (int y = 0; y < VGA_HEIGHT; y++)
@@ -57,32 +59,45 @@ void terminal_initialize()
     }
 }
 
-void print(const char* str)
+void print(const char *str)
 {
     size_t len = strlen(str);
-    for(int i = 0; i < len; i++)
+    for (int i = 0; i < len; i++)
     {
         terminal_writechar(str[i], 15);
     }
 }
 
-static struct paging_4gb_chunk* kernel_chunk = 0;
+static struct paging_4gb_chunk *kernel_chunk = 0;
 
-void panic(const char* msg)
+void panic(const char *msg)
 {
     print("\nThe system has encountered an unrecoverable error and has halted:\n");
     print(msg);
-    while(1)
+    while (1)
     {
         disable_interrupts();
         HALT;
     }
 }
 
+struct gdt gdt_real[PEACHOS_TOTAL_GDT_SEGMENTS];
+struct gdt_structured gdt_structured[PEACHOS_TOTAL_GDT_SEGMENTS] = {
+    {.base = 0x00, .limit = 0x00, .type = 0x00},       // NULL segment
+    {.base = 0x00, .limit = 0xffffffff, .type = 0x9a}, // Kernel code segment
+    {.base = 0x00, .limit = 0xffffffff, .type = 0x92}  // Kernel data segment
+};
+
 void kernel_main()
 {
     terminal_initialize();
-    print("Hello world!\ntest");
+    print("Hello world!\n");
+
+    // Load GDT
+    memset(gdt_real, 0x00, sizeof(gdt_real) - 1);
+    gdt_structured_to_gdt(gdt_real, gdt_structured, PEACHOS_TOTAL_GDT_SEGMENTS);
+    gdt_load(gdt_real, PEACHOS_TOTAL_GDT_SEGMENTS);
+
     // Initialize the heap
     kheap_init();
 
@@ -106,10 +121,9 @@ void kernel_main()
 
     // Enable system interrupts
     enable_interrupts();
-    
-    panic("Test");
+
     int fd = fopen("0:/hello.txt", "r");
-    if(fd)
+    if (fd)
     {
         print("opened\n");
         struct file_stat s;
@@ -117,5 +131,7 @@ void kernel_main()
         fclose(fd);
         print("closed file\n");
     }
-    while(1) {}
+    while (1)
+    {
+    }
 }

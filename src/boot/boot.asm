@@ -38,6 +38,9 @@ start2:
     mov ds, ax
     mov es, ax
     mov ss, ax
+    mov fs, ax
+    mov es, ax
+    
     mov sp, 0x7c00
     sti ; enable interrupts
 
@@ -79,6 +82,19 @@ gdt_descriptor:
 
 [BITS 32]
 load32:
+    mov ax, DATA_SEG
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+
+    ; Enable the A20 line by FAST A20
+    in al, 0x92
+    or al, 2
+    out 0x92, al
+
+    ; For the loading
     mov eax, 1  ; sector to read 
     mov ecx, 100    ; number of sectors to read
     mov edi, 0x0100000  ; where to load the read sectors
