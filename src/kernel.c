@@ -123,7 +123,7 @@ void kernel_main()
     // Load TSS
     tss_load(0x28); // 0x28 is the offset of the TSS segment in the GDT data
 
-    // Set up paging
+    // Set up paging (kernel page directory)
     kernel_chunk = paging_new_4gb(PAGING_IS_WRITEABLE | PAGING_IS_PRESENT | PAGING_ACCESS_FROM_ALL);
 
     // Switch to kernel paging chunk
