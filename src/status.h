@@ -9,5 +9,6 @@
 #define EFSNOTUS 5  // Disk filesystem not us
 #define ERDONLY 6
 #define EUNIMP 7
+#define EISTKEN 8
 
 #endif

@@ -513,7 +513,7 @@ void fat16_fat_item_free(struct fat_item* item)
     }
     else
     {
-        print("Failed to free");
+        print("fat_item type is invalid");
     }
 
     kfree(item);

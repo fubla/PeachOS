@@ -77,8 +77,8 @@ void panic(const char *msg)
     print(msg);
     while (1)
     {
-        //disable_interrupts();
-        //HALT;
+        disable_interrupts();
+        HALT;
     }
 }
 

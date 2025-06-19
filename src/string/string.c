@@ -89,16 +89,34 @@ int istrncmp(const char* str1, const char* str2, int n)
 
 char* strcpy(char* dest, const char* src)
 {
-    char* res = dest;
-    while(*src != 0)
+    while(*src != '\0')
     {
         *(dest++) = *(src++);
     }
 
-    *dest = 0x00;
+    *dest = '\0';
     
-    return res;
+    return dest;
 }
+
+char* strncpy(char* dest, const char* src, size_t n)
+{
+    int i;
+    for(i = 0; i < n - 1; i++)
+    {
+        if(src[i] == '\0')
+        {
+            break;
+        }
+
+        dest[i] = src[i];
+    }
+
+    dest[i] = '\0';
+    
+    return dest;
+}
+
 
 bool isdigit(char c)
 {
